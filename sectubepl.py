@@ -1,7 +1,9 @@
 #!/usr/bin/python
 
 import sys
+import os
 import getopt
+
 
 # @brief Print the help menu
 def usage():
@@ -9,6 +11,25 @@ def usage():
   print("\t-r\tRefresh the html file produced based on your playlist.")
   print("\t-a\tAdd a URL to your playlist.")
 #END usage()
+
+# @brief Parse the configuration file that contains our URL list
+def parse_config():
+  
+  # Get the home directory where our config file is
+  homedir = os.path.expanduser('~')
+
+  # See if the file is there, if it is, open it
+  # otherwise, create it then open it
+  if(not (os.path.exists(homedir + "/.sectubepl"))):
+    open(homedir + "/.sectubepl", "w").close() # Create the file...
+
+  # Now open the file for reading
+  config_in = open(homedir + '/.sectubepl', "r")
+
+
+  config_in.close()
+
+#END parse_config
 
 # @brief Add a url to the configuration file
 # @param url_to_add   The filename of the URL to add
@@ -46,6 +67,7 @@ def main():
   # END
 
   # Parse our config file
+  parse_config()
 
   # Parse our command line arguments
   for o, a in opts:

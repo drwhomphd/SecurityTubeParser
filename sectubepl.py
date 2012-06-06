@@ -5,11 +5,22 @@ import getopt
 
 # @brief Print the help menu
 def usage():
-  print("sectubepl attempts to create a playlist of security tube videos in one page. The code for embedding the videos has changed so they can be added to the youtube playlist of your choice.")
   print("\t-h\tThis message.")
   print("\t-r\tRefresh the html file produced based on your playlist.")
   print("\t-a\tAdd a URL to your playlist.")
 #END usage()
+
+# @brief Add a url to the configuration file
+# @param url_to_add   The filename of the URL to add
+def run_add_url(url_to_add):
+  print url_to_add
+#END add_url
+
+# @brief Run our spider against security tube and output the parsed youtube videos.
+# @param filename_out   The html file to output to
+def run_spider(filename_out):
+  print filename_out
+#END run_spider
 
 def main():
 
@@ -18,6 +29,11 @@ def main():
   run_out = "" # Output filename
   need_add = 0  # Do we add a new url?
   add_url = "" # URL to Add
+
+  if len(sys.argv) < 2:
+    usage()
+    sys.exit(1)
+  #ENDIF
 
   # Get our command line arguments
   try:
@@ -50,8 +66,7 @@ def main():
   # First we add a URL if one is provided
   if need_add:
     assert add_url
-    # Add our new URL to our play list
-    add_url(add_url)
+    run_add_url(add_url)
   # ENDIF
 
   # Then we update our playlist html file.

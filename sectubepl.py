@@ -8,8 +8,8 @@ import getopt
 # @brief Print the help menu
 def usage():
   print("\t-h\tThis message.")
-  print("\t-r\tRefresh the html file produced based on your playlist.")
-  print("\t-a\tAdd a URL to your playlist.")
+  print("\t-r [filename]\tRefresh the html file produced based on your playlist.")
+  print("\t-a [URL]\tAdd a URL to your playlist.")
 #END usage()
 
 # @brief Parse the configuration file that contains our URL list
@@ -75,6 +75,9 @@ def main():
   list_of_urls = []
   list_of_urls = parse_config()
 
+  if len(list_of_urls) == 0:
+    print("No URLs in playlist")
+
   # Parse our command line arguments
   for o, a in opts:
     if o == "-h":
@@ -102,6 +105,7 @@ def main():
     assert run_out
     run_spider(run_out)
   #ENDIF
+
 
   sys.exit(0)
 #END main()

@@ -13,7 +13,10 @@ def usage():
 #END usage()
 
 # @brief Parse the configuration file that contains our URL list
+# @return A list of URLs in our playlist to parse
 def parse_config():
+
+  url_list = []
   
   # Get the home directory where our config file is
   homedir = os.path.expanduser('~')
@@ -29,6 +32,8 @@ def parse_config():
 
   config_in.close()
 
+  return url_list
+
 #END parse_config
 
 # @brief Add a url to the configuration file
@@ -39,7 +44,7 @@ def run_add_url(url_to_add):
 
 # @brief Run our spider against security tube and output the parsed youtube videos.
 # @param filename_out   The html file to output to
-def run_spider(filename_out):
+def run_spider(filename_out, url_list):
   print filename_out
 #END run_spider
 
@@ -67,7 +72,8 @@ def main():
   # END
 
   # Parse our config file
-  parse_config()
+  list_of_urls = []
+  list_of_urls = parse_config()
 
   # Parse our command line arguments
   for o, a in opts:
@@ -92,7 +98,7 @@ def main():
   # ENDIF
 
   # Then we update our playlist html file.
-  if need_run:
+  if need_run and len(list_of_urls) > 0:
     assert run_out
     run_spider(run_out)
   #ENDIF

@@ -10,10 +10,13 @@ CONFIG_FILE = os.path.expanduser('~') + "/.sectubepl"
 
 # @brief HTMLParser class for dealing with the Security Tube HTML
 # pages. The whole goal is to pull out the iframe that refers to
-# the youtube link and then rewrite it in another file.
+# the youtube link and then rewrite it in another file. It depends
+# on the following format for a youtube link:
+# <div align="center"><iframe title="YouTube video player" width="640" height="390" src="http://www.youtube.com/embed/f1IXTHrnXz4" width="640" height="390" frameborder="0" allowfullscreen></iframe> </div>
 class SecTubeParser(HTMLParser):
 
   video_url = ""
+  video_name = ""
 
   def handle_starttag(self, tag, attrs):
     # We only care about checking iframe's because Security tube only uses
@@ -25,6 +28,12 @@ class SecTubeParser(HTMLParser):
       #ENDFOR
     # ENDIF
   # End handle_starttag()
+
+  def handle_data(self, data):
+    if self.get_starttag_text() == "<title>":
+      if not data.isspace():
+        self.video_name = data
+  # End handle_data
 
 #END CLASS SecTubeParser
 
@@ -129,11 +138,13 @@ def run_spider(filename_out, url_list):
     parser.feed(file_data)
 
     print parser.video_url
+    print parser.video_name
 
     # Write out specific youtube url to our
     # output file using our own embedded object
     # for the youtube video
-
+    file_out.write('<h2>' + parser.video_name + '</h2>\n')
+    file_out.write('\t<iframe id="ytplayer" type="text/html" width="640" height="390" src="' + parser.video_url + '" ></iframe>\n\n')
   #END for
 
   file_out.write("</html>\n")

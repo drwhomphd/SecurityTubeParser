@@ -43,7 +43,7 @@ class SecTubeParser(HTMLParser):
 def usage():
   print("\t-h\tThis message.")
   print("\t-r [filename]\tRefresh the html file produced based on your playlist.")
-  print("\t-a [URL]\tAdd a URL to your playlist.")
+  print("\t-a [URL]\tAdd a URL to your playlist. No http:// in front or you'll get an error.")
 #END usage()
 
 # @brief Checks to see if the URL is valid

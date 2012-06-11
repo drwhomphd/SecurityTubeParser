@@ -112,6 +112,9 @@ def run_spider(filename_out, url_list):
 
   for url in url_list:
 
+    # Remove the http:// from the beginning of the url if it exists
+    url = url.replace("http://", "")
+
     # Assumes no http://
     file_start = url.find('/')
 

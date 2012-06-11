@@ -3,6 +3,7 @@
 import sys
 import os
 import getopt
+import httplib
 
 CONFIG_FILE = os.path.expanduser('~') + "/.sectubepl"
 
@@ -17,7 +18,7 @@ def usage():
 # @param url_to_check   The URL to check
 def url_is_valid(url_to_check):
   # TODO: Make sure URL is valid
-  return true
+  return True
 #END url_is_valid()
 
 # @brief Parse the configuration file that contains our URL list
@@ -54,10 +55,6 @@ def parse_config():
 # @brief Add a url to the configuration file
 # @param url_to_add   The filename of the URL to add
 def run_add_url(url_to_add):
-  print url_to_add
-
-  # TODO: Make sure URL is valid
-  assert url_is_valid(url_to_add) 
 
   # Open config file
   try:
@@ -67,7 +64,7 @@ def run_add_url(url_to_add):
     parse_config()
   # End try
 
-  config_in.write(url_to_add+"\n")
+  config_in.write(url_to_add+",0\n")
 
   config_in.close()
 
@@ -76,7 +73,34 @@ def run_add_url(url_to_add):
 # @brief Run our spider against security tube and output the parsed youtube videos.
 # @param filename_out   The html file to output to
 def run_spider(filename_out, url_list):
-  print filename_out
+
+  file_out = open(filename_out, 'w')
+
+  file_out.write("<html>\n")
+
+  for url in url_list:
+
+    # Split url into two parts
+
+    # First part is the main server
+
+    # Second part is the specific file
+
+    # Open our connection
+    # Get our file
+
+    # Send file to HTML parser to find specific
+    # youtube section and get specific youtube url
+
+
+    # Write out specific youtube url to our
+    # output file using our own embedded object
+    # for the youtube video
+
+  #END for
+
+  file_out.write("</html>\n")
+
 #END run_spider
 
 def main():
@@ -126,14 +150,20 @@ def main():
   # END for
 
   # First we add a URL if one is provided
-  if need_add:
+  if need_add and add_url not in list_of_urls:
+    
     assert add_url
+    assert url_is_valid(add_url)
+
     run_add_url(add_url)
+    list_of_urls.append(add_url)
   # ENDIF
 
   # Then we update our playlist html file.
   if need_run and len(list_of_urls) > 0:
+  
     assert run_out
+    
     run_spider(run_out)
   #ENDIF
 

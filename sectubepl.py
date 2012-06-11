@@ -4,6 +4,7 @@ import sys
 import os
 import getopt
 
+CONFIG_FILE = os.path.expanduser('~') + "/.sectubepl"
 
 # @brief Print the help menu
 def usage():
@@ -12,23 +13,37 @@ def usage():
   print("\t-a [URL]\tAdd a URL to your playlist.")
 #END usage()
 
+# @brief Checks to see if the URL is valid
+# @param url_to_check   The URL to check
+def url_is_valid(url_to_check):
+  # TODO: Make sure URL is valid
+  return true
+#END url_is_valid()
+
 # @brief Parse the configuration file that contains our URL list
 # @return A list of URLs in our playlist to parse
 def parse_config():
 
   url_list = []
   
-  # Get the home directory where our config file is
-  homedir = os.path.expanduser('~')
-
   # See if the file is there, if it is, open it
   # otherwise, create it then open it
-  if(not (os.path.exists(homedir + "/.sectubepl"))):
-    open(homedir + "/.sectubepl", "w").close() # Create the file...
+  if(not (os.path.exists(CONFIG_FILE))):
+    open(CONFIG_FILE, "w").close() # Create the file...
 
   # Now open the file for reading
-  config_in = open(homedir + '/.sectubepl', "r")
+  config_in = open(CONFIG_FILE, "r")
 
+  config_lines = config_in.readlines()
+
+  for line in config_lines:
+    line_split = line.split(',')
+
+    assert url_is_valid(line_split[0])
+
+    url_list.append(line_split[0])
+
+  #END for
 
   config_in.close()
 
@@ -40,6 +55,22 @@ def parse_config():
 # @param url_to_add   The filename of the URL to add
 def run_add_url(url_to_add):
   print url_to_add
+
+  # TODO: Make sure URL is valid
+  assert url_is_valid(url_to_add) 
+
+  # Open config file
+  try:
+    config_in = open(CONFIG_FILE, 'a+')
+  except IOError:
+    print("Cannot find " + CONFIG_FILE + ". Creating...")
+    parse_config()
+  # End try
+
+  config_in.write(url_to_add+"\n")
+
+  config_in.close()
+
 #END add_url
 
 # @brief Run our spider against security tube and output the parsed youtube videos.

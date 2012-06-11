@@ -115,7 +115,7 @@ def run_spider(filename_out, url_list):
     # Assumes no http://
     file_start = url.find('/')
 
-    # First part is the main server, we still ignore the http:// portion.
+    # First part is the main server
     host = url[:file_start]
 
     # Second part is the specific file

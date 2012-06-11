@@ -4,8 +4,31 @@ import sys
 import os
 import getopt
 import httplib
+from HTMLParser import HTMLParser
 
 CONFIG_FILE = os.path.expanduser('~') + "/.sectubepl"
+
+# @brief HTMLParser class for dealing with the Security Tube HTML
+# pages. The whole goal is to pull out the iframe that refers to
+# the youtube link and then rewrite it in another file.
+class SecTubeParser(HTMLParser):
+
+  video_url = ""
+
+  def handle_starttag(self, tag, attrs):
+    # We only care about checking iframe's because Security tube only uses
+    # 1 iframe on the video page and that's to Youtube
+    if tag == "iframe":
+      for a in attrs:
+        if a[0] == "src":
+          self.video_url = a[1]
+      #ENDFOR
+    # ENDIF
+  # End handle_starttag()
+
+#END CLASS SecTubeParser
+
+
 
 # @brief Print the help menu
 def usage():
@@ -101,7 +124,11 @@ def run_spider(filename_out, url_list):
 
     # Send file to HTML parser to find specific
     # youtube section and get specific youtube url
+    parser = SecTubeParser()
 
+    parser.feed(file_data)
+
+    print parser.video_url
 
     # Write out specific youtube url to our
     # output file using our own embedded object
@@ -183,4 +210,4 @@ def main():
 
 if __name__ == "__main__":
   main()
-
+#End if

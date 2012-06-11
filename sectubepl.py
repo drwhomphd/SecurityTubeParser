@@ -112,13 +112,11 @@ def run_spider(filename_out, url_list):
 
   for url in url_list:
 
-    # Split url into two parts, we ignore http:// at the beginning
-    # then we add back in 7 to take into account we removed
-    # 7 characters before the find
-    file_start = url[7:].find('/') + 7
+    # Assumes no http://
+    file_start = url.find('/')
 
     # First part is the main server, we still ignore the http:// portion.
-    host = url[7:file_start]
+    host = url[:file_start]
 
     # Second part is the specific file
     fetch_file = url[file_start:]
@@ -136,9 +134,6 @@ def run_spider(filename_out, url_list):
     parser = SecTubeParser()
 
     parser.feed(file_data)
-
-    print parser.video_url
-    print parser.video_name
 
     # Write out specific youtube url to our
     # output file using our own embedded object

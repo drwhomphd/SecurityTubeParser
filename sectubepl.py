@@ -80,14 +80,24 @@ def run_spider(filename_out, url_list):
 
   for url in url_list:
 
-    # Split url into two parts
+    # Split url into two parts, we ignore http:// at the beginning
+    # then we add back in 7 to take into account we removed
+    # 7 characters before the find
+    file_start = url[7:].find('/') + 7
 
-    # First part is the main server
+    # First part is the main server, we still ignore the http:// portion.
+    host = url[7:file_start]
 
     # Second part is the specific file
+    fetch_file = url[file_start:]
 
     # Open our connection
+    conn = httplib.HTTPConnection(host)
+
     # Get our file
+    conn.request("GET", fetch_file)
+    response = conn.getresponse()
+    file_data = response.read()
 
     # Send file to HTML parser to find specific
     # youtube section and get specific youtube url
@@ -164,7 +174,7 @@ def main():
   
     assert run_out
     
-    run_spider(run_out)
+    run_spider(run_out, list_of_urls)
   #ENDIF
 
 
